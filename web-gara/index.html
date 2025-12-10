@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Feliz Cumpleaños 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1: #fff7fb;
+  --bg2: #fffaf0;
+  --card:#ffffff;
+  --accent:#ff6fb5;
+  --accent-2:#6bd2c9;
+  --muted:#6b6b6b;
+  --shadow: 0 14px 40px rgba(18,18,18,0.08);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Montserrat", sans-serif;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.card{
+  width:100%;
+  max-width:520px;
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:26px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.photo{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  margin:0 auto 10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+h1{
+  font-family:"Playfair Display", serif;
+  margin:10px 0 6px;
+  font-size:26px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.message{
+  margin-top:18px;
+  background:rgba(255,255,255,0.9);
+  border-radius:12px;
+  padding:20px;
+  text-align:left;
+}
+
+.greet{
+  font-size:18px;
+  margin-bottom:10px;
+}
+
+.name{
+  color:var(--accent);
+  font-weight:700;
+}
+
+.text{
+  font-size:15px;
+  line-height:1.6;
+}
+
+.meta{
+  margin-top:18px;
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.buttons{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.buttons button{
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;
+  transition:transform 0.2s;
+}
+
+.buttons button:hover{
+  transform:scale(1.05);
+}
+
+.warning{
+  margin-top:10px;
+  font-size:13px;
+  color:#ff4f4f;
+  animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:0.4}
+}
+
+.result{
+  margin-top:18px;
+  font-size:16px;
+  font-weight:600;
+  color:var(--accent);
+}
+
+canvas{
+  position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:999;
+}
+
+@media (max-width: 430px){
+  .card{padding:20px;}
+  h1{font-size:22px;}
+  .text{font-size:14px;}
+  .buttons{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+<canvas id="explosion"></canvas>
+
+<div class="card">
+
+  <div class="photo">
+    <img src="images/gianella.jpg">
+  </div>
+
+  <h1>¡Feliz Cumpleaños Señorita Gia!</h1>
+  <div class="subtitle">Un pequeño detalle solo para ti</div>
+
+  <div class="message">
+    <div class="greet">
+      Para <span class="name">Gianella</span>,
+    </div>
+
+    <div class="text">
+      Hoy celebramos tu vida, tu sonrisa, tu forma de ser y todo lo bonito que transmites sin darte cuenta.
+      Deseo que este nuevo año te regale salud, calma, sueños cumplidos y muchísimos momentos felices.
+      Gracias por existir y por hacer el mundo un poquito más bonito. 💕
+    </div>
+
+    <div class="meta">
+      <div>Con cariño, El señor del concierto jajaja osea yo Jean</div>
+      <div id="dateText"></div>
+    </div>
+
+    <div class="buttons" id="buttons">
+      <button onclick="choose(1)">Sorpresa 1</button>
+      <button onclick="choose(2)">Sorpresa 2</button>
+      <button onclick="choose(3)">Sorpresa 3</button>
+      <button onclick="choose(4)">Sorpresa 4</button>
+    </div>
+
+    <div class="warning">⚠️ Elige bien… solo puedes escoger una, peligro, danger jaja😅⚠️</div>
+    <div class="result" id="result"></div>
+
+  </div>
+</div>
+
+<script>
+
+// ===== CONFETI CONTINUO =====
+const c = document.getElementById("confetti");
+const ctx = c.getContext("2d");
+const dpr = devicePixelRatio || 1;
+c.width = innerWidth * dpr;
+c.height = innerHeight * dpr;
+ctx.scale(dpr, dpr);
+
+const confetti = Array.from({length:120}).map(()=>({
+  x:Math.random()*innerWidth,
+  y:Math.random()*innerHeight,
+  r:Math.random()*4+2,
+  d:Math.random()*3+1
+}));
+
+function animateConfetti(){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  confetti.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle = Math.random()>0.5 ? "#ff6fb5" : "#6bd2c9";
+    ctx.fill();
+    p.y += p.d;
+    if(p.y > innerHeight){ p.y = -10; p.x = Math.random()*innerWidth; }
+  });
+  requestAnimationFrame(animateConfetti);
+}
+animateConfetti();
+
+// ===== EXPLOSIÓN =====
+const ec = document.getElementById("explosion");
+const ectx = ec.getContext("2d");
+ec.width = innerWidth * dpr;
+ec.height = innerHeight * dpr;
+ectx.scale(dpr, dpr);
+
+let particles = [];
+
+function explode(){
+  for(let i=0;i<80;i++){
+    particles.push({
+      x:innerWidth/2,
+      y:innerHeight/2,
+      vx:(Math.random()-0.5)*12,
+      vy:(Math.random()-0.5)*12,
+      life:60
+    });
+  }
+}
+
+function animateExplosion(){
+  ectx.clearRect(0,0,innerWidth,innerHeight);
+  particles.forEach((p,i)=>{
+    ectx.beginPath();
+    ectx.arc(p.x,p.y,3,0,Math.PI*2);
+    ectx.fillStyle = Math.random()>0.5 ? "#ff6fb5" : "#6bd2c9";
+    ectx.fill();
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+    if(p.life<=0) particles.splice(i,1);
+  });
+  requestAnimationFrame(animateExplosion);
+}
+animateExplosion();
+
+function choose(op){
+  document.getElementById("buttons").style.display="none";
+  explode();
+
+  const messages = {
+  1: "Has elegido la sorpresa de Parapente en Miraflores o ir un Full Day a algun lugar 💖",
+  2: "Has elegido la sorpresa de Euro Kart en Jockey Plaza ✨",
+  3: "Has elegido la sorpresa de darte un regalo sorpresa en persona ya que no me mandaste tu ubi jaja",
+  4: "Has elegido la sorpresa de un regalo de Victoria Secret o Aruma a tu eleccion y yo paso tarjeta xd💕"
+};
+
+  document.getElementById("result").innerText="Has elegido: "+messages[op];
+}
+</script>
+
+</body>
+</html>
