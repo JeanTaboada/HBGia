@@ -204,20 +204,22 @@ canvas{
   from{opacity:0; transform:translateY(20px);}
   to{opacity:1; transform:translateY(0);}
 }
-.music-btn{
-  position:fixed;
-  bottom:100px;
-  right:20px;
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  border:none;
-  cursor:pointer;
-  font-size:20px;
-  background:linear-gradient(135deg,#ff6fb5,#6bd2c9);
-  color:white;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-  z-index:1001;
+.music-btn {
+  display: inline-flex; /* Para centrarlo mejor */
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px; /* Espacio arriba del botón */
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  background: linear-gradient(135deg, #ff6fb5, #6bd2c9);
+  color: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  z-index: 10;
+  position: relative; /* Cambiado de fixed a relative */
 }
 
 .music-btn.playing{
@@ -270,10 +272,13 @@ canvas{
     <div class="warning">🎁 REGALOOO ENTREGADO 🎁</div>
     <div class="gif-container">
   <img src="images/regaloentregado.jpg" alt="Gif cumpleaños">
-      <audio id="bgMusic" loop>
-  <source src="images/Manuel Medrano- Bajo el agua letra.mp3" type="audio/mpeg">
-</audio>
-<button class="music-btn" onclick="toggleMusic()">🎵 Música</button>
+      <div class="gif-container">
+    <img src="images/regaloentregado.jpg" alt="Gif cumpleaños">
+    <audio id="bgMusic" loop>
+        <source src="images/Manuel Medrano- Bajo el agua letra.mp3" type="audio/mpeg">
+    </audio>
+</div>
+<button class="music-btn" onclick="toggleMusic()">🎵</button>
   </div>
   </div>
  
@@ -415,6 +420,7 @@ function toggleMusic(){
 
 </body>
 </html>
+
 
 
 
