@@ -204,6 +204,30 @@ canvas{
   from{opacity:0; transform:translateY(20px);}
   to{opacity:1; transform:translateY(0);}
 }
+.music-btn{
+  position:fixed;
+  bottom:100px;
+  right:20px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  font-size:20px;
+  background:linear-gradient(135deg,#ff6fb5,#6bd2c9);
+  color:white;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  z-index:1001;
+}
+
+.music-btn.playing{
+  animation:spin 3s linear infinite;
+}
+
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
 
 </style>
 </head>
@@ -239,6 +263,12 @@ canvas{
     Presiona aceptar 🎶
   </div>
   <button class="song-btn" onclick="nextLine()">Aceptar</button>
+  <audio id="bgMusic" loop>
+  <source src="images/Manuel Medrano- Bajo el agua letra.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" onclick="toggleMusic()">🎵 Música</button>
+
 </div>
     </div>
     <div class="warning">🎁 REGALOOO ENTREGADO 🎁</div>
@@ -356,11 +386,24 @@ function nextLine(){
     document.getElementById("songBox").style.display = "none";
   }
 }
+const music = document.getElementById("bgMusic");
+const musicBtn = document.querySelector(".music-btn");
+
+function toggleMusic(){
+  if(music.paused){
+    music.play();
+    musicBtn.classList.add("playing");
+  }else{
+    music.pause();
+    musicBtn.classList.remove("playing");
+  }
+}
 
 </script>
 
 </body>
 </html>
+
 
 
 
