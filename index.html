@@ -230,6 +230,35 @@ canvas{
   from{transform:rotate(0deg);}
   to{transform:rotate(360deg);}
 }
+.countdown-box{
+  margin-top:16px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.countdown-item{
+  background:linear-gradient(135deg,#fff,#fff5fa);
+  padding:14px 16px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
+  text-align:center;
+  min-width:80px;
+}
+
+.countdown-number{
+  font-size:32px;
+  font-weight:700;
+  color:#ff6fb5;
+  text-shadow:0 0 10px rgba(255,111,181,0.4);
+}
+
+.countdown-label{
+  font-size:12px;
+  color:#6b6b6b;
+  margin-top:4px;
+}  
 
 </style>
 </head>
@@ -245,8 +274,9 @@ canvas{
     <img src="images/gianellaa.jpg">
   </div>
 
-  <h1>¡Feliz Cumpleaños Señorita Gia!</h1>
+  <h1>Esperando el cumpleaños de la señorita muy bonita 💖</h1>
   <div class="subtitle">Un pequeño detalle solo para ti</div>
+  <div id="countdown" class="countdown-box"></div>
   <div class="result" id="result"></div>
   <div class="message">
     <div class="greet">
@@ -413,6 +443,52 @@ function toggleMusic(){
     music.pause();
     musicBtn.classList.remove("playing");
   }
+  // ===== CONTADOR CUMPLEAÑOS =====
+function updateCountdown(){
+  const now = new Date();
+
+  const currentYear = now.getFullYear();
+  let target = new Date(`December 10, ${currentYear} 00:00:00`);
+
+  if(now > target){
+    target = new Date(`December 10, ${currentYear + 1} 00:00:00`);
+  }
+
+  const diff = target - now;
+
+  if(diff <= 0){
+    document.getElementById("countdown").innerHTML =
+      "🎉 ¡Hoy es su día! 💖";
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById("countdown").innerHTML = `
+    <div class="countdown-item">
+      <div class="countdown-number">${days}</div>
+      <div class="countdown-label">Días</div>
+    </div>
+    <div class="countdown-item">
+      <div class="countdown-number">${hours}</div>
+      <div class="countdown-label">Horas</div>
+    </div>
+    <div class="countdown-item">
+      <div class="countdown-number">${minutes}</div>
+      <div class="countdown-label">Min</div>
+    </div>
+    <div class="countdown-item">
+      <div class="countdown-number">${seconds}</div>
+      <div class="countdown-label">Seg</div>
+    </div>
+  `;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
 </script>
 
 </body>
